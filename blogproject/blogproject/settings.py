@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# 工程blogproject的根目录, 获取的是blogproject目录的上层目录
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -25,7 +26,7 @@ SECRET_KEY = 'dqpj$7o9k(37ex7t*za%u=v7&!u+^*=(4obk_4t5w$ptc)v5jm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALOWED_HOSTS = ['localhost', '114.215.93.235']
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -57,6 +58,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -65,6 +67,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+
     },
 ]
 
