@@ -105,7 +105,17 @@
                     <ul>
                         {% for date in date_list %}
                         <li>
-                        <a href="#">{{ date.year }} 年 {{ date.month }} 月</a>
+                            <!-- \{\% url \%\} 这个模板标签的作用是解析视图函数 blog\:archives 对应的 URL 模式，
+                                并把 URL 模式中的年和月替换成 date.year，date.month 的值。
+                            硬编码模式：
+                                /archives/{{ date.year }}/{{ date.month }}
+                            如果使用了硬编码的写法，那你需要把每一处 /archives/{{ date.year }}/{{ date.month }}/ 
+                            修改为新的模式。但如果使用了 \{\% url \%\} 模板标签，则不用做任何修改。
+                            -->
+                            {% url 'blog:archives' date.year date.month as the_url %}
+                            <a href="{{ the_url }}">
+                                {{ date.year }} 年 {{ date.month }} 月
+                            </a>
                         </li>
                         {% empty %}
                         暂无归档

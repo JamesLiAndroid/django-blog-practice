@@ -24,3 +24,9 @@ def detail(request, pk):
         'markdown.extensions.toc'
         ])
     return render(request, 'blog/detail.html', context={'post':post})
+
+def archives(request, year, month):
+    print(year, month)
+    post_list = Post.objects.filter(create_time__year=year,
+            create_time__month=month).order_by('-create_time')
+    return render(request, 'blog/index.html', context={'post_list' : post_list})
