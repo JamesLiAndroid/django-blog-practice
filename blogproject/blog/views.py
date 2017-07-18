@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
-
+import markdown
 from .models import Post
 
 
@@ -16,4 +16,9 @@ def index(request):
 def detail(request, pk):
     print('pk=', pk)
     post = get_object_or_404(Post, pk = pk)
+    post.body = markdown.markdown(post.body, extensions=[
+        'markdown.extension.extra',
+        'markdown.extension.codehilite',
+        'markdown.extension.toc'
+        ])
     return render(request, 'blog/detail.html', context={'post':post})
