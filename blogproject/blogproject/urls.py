@@ -18,7 +18,8 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('blog.urls'))
+    url(r'', include('blog.urls')),
+    url(r'', include('comments.urls'))
 ]
 
 # include 前还有一个 r''，这是一个空字符串。
