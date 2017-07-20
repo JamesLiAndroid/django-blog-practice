@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.six import python_2_unicode_compatible
-
+from django.utils.html import strip_tags
 # Create your models here.
 
 
@@ -77,6 +77,21 @@ class Post(models.Model):
 
     # 添加访问量的统计
     views = models.PositiveIntegerField(default=0)
+
+    # 定制保存摘要的方法
+    def save(self, *args, **kwargs):
+        # 如果没有填写摘要
+        if not self.excerpt:
+            md = markdown.Markdown(extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite'
+            ])
+            # 先将markdown文本渲染成html文本，然后去掉html的全部标签
+            # 从文本中摘取前54个字符赋给excerpt
+            self.excerpt = strip_tags(md.convert(self.body))[:54]
+
+        # 调用父类的save方法保存到数据库中
+        super(Post, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
