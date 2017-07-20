@@ -7,6 +7,16 @@ import markdown
 from .models import Post, Category
 from comments.forms import CommentForm
 
+# 把 index 视图函数改造成类视图函数。
+from django.views.generic import ListView
+
+class IndexView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
+# 改造完毕
+
+# 原始的index
 def index(request):
     """
     -created_time
@@ -37,12 +47,31 @@ def detail(request, pk):
         'comment_list': comment_list
     }
     return render(request, 'blog/detail.html', context=context)
+# 对archives进行改造
+class ArchivesView(IndexView):
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        # archs = get_object_or_404(Post, create_time__year=self.kwargs.get('year'), create_time__month=self.kwargs.get('month'))
+        return super(ArchivesView, self).get_queryset().filter(create_time__year = year, create_time__month=month)
+
 
 def archives(request, year, month):
     print(year, month)
     post_list = Post.objects.filter(create_time__year=year,
             create_time__month=month).order_by('-create_time')
     return render(request, 'blog/index.html', context={'post_list' : post_list})
+
+# 对category进行改造, 可以继承自IndexView
+class CategoryView(IndexView):
+#    model = Post
+#    template_name = 'blog/index.html'
+#    context_object_name = 'post_list'
+    def get_queryset(self):
+        cate = get_object_or_404(Category, pk = self.kwargs.get('pk')) # self.kwargs.get('pk') 来获取从 URL 捕获的分类 id 值。
+        return super(CategoryView, self).get_queryset().filter(category=cate)
+
+# category改造结束
 
 def category(request, pk):
     cate = get_object_or_404(Category, pk=pk)
