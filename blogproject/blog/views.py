@@ -14,6 +14,10 @@ class IndexView(ListView):
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
 
+    # 添加分页功能
+    paginate_by = 2
+
+
 def index(request):
     """
     -created_time
