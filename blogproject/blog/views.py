@@ -143,7 +143,7 @@ class IndexView(ListView):
             'first': first,
             'last': last
         }
-        pprint.pprint(data)
+        # pprint.pprint(data)
         return data
 
 
@@ -168,6 +168,8 @@ def archives(request, year, month):
             create_time__month=month).order_by('-create_time')
     return render(request, 'blog/index.html', context={'post_list' : post_list})
 
+# Category视图函数不起作用！
+
 #class CategoryView(ListView):
 #    model = Post
 #    template_name = 'blog/index.html'
@@ -181,12 +183,14 @@ def archives(request, year, month):
 #        return super(CategoryView, self).get_queryset().filter(category=cate)
 
 # 简化方式
-class CategoryView(IndexView):
-    def get_query(self):
+#class CategoryView(IndexView):
+#    print("Category 视图函数")
+#    def get_query(self):
         # 在类视图中，从 URL 捕获的命名组参数值保存在实例的 kwargs 属性（是一个字典）里，
         # 非命名组参数值保存在实例的 args 属性（是一个列表）里
-        cate = get_object_or_404(Category, pk = self.kwargs.get('pk'))
-        return super(CategoryView, self).get_queryset().filter(category=cate)
+#        cate = get_object_or_404(Category, pk = self.kwargs.get('pk'))
+#        pprint.pprint(cate)
+#        return super(CategoryView, self).get_queryset().filter(category=cate)
 
 def category(request, pk):
     cate = get_object_or_404(Category, pk=pk)
