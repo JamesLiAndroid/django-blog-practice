@@ -7,6 +7,13 @@ import markdown
 from .models import Post, Category
 from comments.forms import CommentForm
 
+from django.views.generic import ListView
+
+class IndexView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
+
 def index(request):
     """
     -created_time
@@ -38,11 +45,37 @@ def detail(request, pk):
     }
     return render(request, 'blog/detail.html', context=context)
 
+class ArchivesView(IndexView):
+    def get_query(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        return super(ArchivesView, self).get_queryset().filter(create_time__year=year, create_time__month=month)
+
 def archives(request, year, month):
-    print(year, month)
+    # print(year, month)
     post_list = Post.objects.filter(create_time__year=year,
             create_time__month=month).order_by('-create_time')
     return render(request, 'blog/index.html', context={'post_list' : post_list})
+
+#class CategoryView(ListView):
+#    model = Post
+#    template_name = 'blog/index.html'
+#    context_object_name = 'post_list'
+
+#    def get_query(self):
+        # 在类视图中，从 URL 捕获的命名组参数值保存在实例的 kwargs 属性（是一个字典）里，
+        # 非命名组参数值保存在实例的 args 属性（是一个列表）里
+
+#        cate = get_object_or_404(Category, pk = self.kwargs.get('pk'))
+#        return super(CategoryView, self).get_queryset().filter(category=cate)
+
+# 简化方式
+class CategoryView(IndexView):
+    def get_query(self):
+        # 在类视图中，从 URL 捕获的命名组参数值保存在实例的 kwargs 属性（是一个字典）里，
+        # 非命名组参数值保存在实例的 args 属性（是一个列表）里
+        cate = get_object_or_404(Category, pk = self.kwargs.get('pk'))
+        return super(CategoryView, self).get_queryset().filter(category=cate)
 
 def category(request, pk):
     cate = get_object_or_404(Category, pk=pk)
