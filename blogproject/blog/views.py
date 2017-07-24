@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 # from markdown import *
 
 import markdown
-from .models import Post, Category
+from .models import Post, Category, Tag
 from comments.forms import CommentForm
 
 from django.views.generic import ListView, DetailView
@@ -265,5 +265,15 @@ def detail(request, pk):
         'comment_list': comment_list
     }
     return render(request, 'blog/detail.html', context=context)
+
+# 标签云的视图类
+class TagView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
+
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
+        return super(TagView, self).get_queryset().filter(tags=tag)
 
 

@@ -3,7 +3,7 @@
 
 # 模板标签的编写！
 from django import template
-from ..models import Post, Category
+from ..models import Post, Category, Tag
 
 from django.db.models.aggregates import Count
 
@@ -20,9 +20,9 @@ def archives():
     return Post.objects.dates('create_time', 'month', order='DESC')
 
 # 分类模板标签
-@register.simple_tag
-def get_categories():
-    return Category.objects.all()
+#@register.simple_tag
+#def get_categories():
+#    return Category.objects.all()
 
 # Annotate使用
 @register.simple_tag
@@ -33,4 +33,6 @@ def get_categories():
     # 小写的post其实关联的是Post，django这样规定的，不能修改为Post
     return Category.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
 
-
+@register.simple_tag
+def get_tags():
+    return Tag.objects.annotate(num_posts=Count('post')).filter(num_posts__gt = 0)

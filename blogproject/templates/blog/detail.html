@@ -14,8 +14,17 @@
                         </div>
                     </header>
                     <div class="entry-content clearfix">
-                        <!-- {{ post.body }} 经模板系统渲染后应该显示 body 本身的值，但是在后面加上 safe 过滤器后，渲染的值不再是body 本身的值，而是由 safe 函数处理后返回的值。过滤器的用法是在模板变量后加一个 | 管道符号，再加上过滤器的名称。  -->
+                        <!-- {\{ post.body }\} 经模板系统渲染后应该显示 body 本身的值，但是在后面加上 safe 过滤器后，渲染的值不再是body 本身的值，而是由 safe 函数处理后返回的值。过滤器的用法是在模板变量后加一个 | 管道符号，再加上过滤器的名称。  -->
                         {{ post.body | safe }}
+                        <!-- 添加标签云的显示 -->
+                        <div class="widget-tag-cloud">
+                            <ul>
+                                标签：
+                                {% for tag in post.tags.all %}
+                                    <li><a href="{% url 'blog:tag' tag.pk %}"># {{ tag.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </article>
                  <section class="comment-area" id="comment-area">
