@@ -3,6 +3,7 @@
 
 from django.conf.urls import url
 
+from blog.feeds import AllPostsRssFeed
 from . import views
 
 app_name = 'blog' # 指定视图函数的命名空间
@@ -24,5 +25,8 @@ urlpatterns = [
     url(r'^category/(?P<pk>[0-9]+)/$', views.category, name='category'),
 
     # 标签云视图
-    url(r'^tag/(?P<pk>[0-9]+)/$', views.TagView.as_view(), name='tag')
+    url(r'^tag/(?P<pk>[0-9]+)/$', views.TagView.as_view(), name='tag'),
+
+    # RSS订阅
+#    url(r'^all/rss/$', AllPostsRssFeed(), name='rss')
 ]
