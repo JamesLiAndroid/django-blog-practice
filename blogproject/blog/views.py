@@ -9,6 +9,9 @@ from comments.forms import CommentForm
 
 from django.views.generic import ListView, DetailView
 
+from django.utils.text import slugify
+from markdown.extensions.toc import TocExtension
+
 import pprint
 
 class IndexView(ListView):
@@ -224,9 +227,13 @@ class PostDetailView(DetailView):
                 extensions=[
                     'markdown.extensions.extra',
                     'markdown.extensions.codehilite',
-                    'markdown.extensions.toc'
+                    # 美化标题显示
+                    TocExtension(slugify=slugify),
+                    #'markdown.extensions.toc'
                     ]
                 )
+        post.body = md.convert(post.body)
+        post.toc = md.toc
         return post
 
     def get_context_data(self, **kwargs):
