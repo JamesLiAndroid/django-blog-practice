@@ -23,7 +23,9 @@ urlpatterns = [
     url(r'', include('blog.urls')),
     url(r'', include('comments.urls')),
     # RSS订阅
-    url(r'^all/rss/$', AllPostsRssFeed(), name='rss')
+    url(r'^all/rss/$', AllPostsRssFeed(), name='rss'),
+    # 搜索
+    url(r'^search/', include('haystack.urls'))
 ]
 
 # include 前还有一个 r''，这是一个空字符串。

@@ -29,4 +29,7 @@ urlpatterns = [
 
     # RSS订阅
 #    url(r'^all/rss/$', AllPostsRssFeed(), name='rss')
+
+    # 搜索内容
+    #url(r'^search/$', views.search, name='search')
 ]
